@@ -1,2 +1,11 @@
 https://jandari91.github.io/posts/nvidia/
 https://jandari91.github.io/posts/cuda/
+
+cat << EOF >> copy-model-to-pvc.sh
+oc exec -i example-$LOCAL_PVC_TARGET -- mkdir -p /tmp/shared_model_storage/$MODEL_PATH
+for f in *
+do
+        oc cp $f example-$LOCAL_PVC_TARGET:/tmp/shared_model_storage/$MODEL_PATH/$f
+        echo "copied $f"
+done
+EOF
