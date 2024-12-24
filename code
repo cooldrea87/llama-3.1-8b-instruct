@@ -20,3 +20,10 @@ outputs = pipeline(
     max_new_tokens=256,
 )
 print(outputs[0]["generated_text"][-1])
+
+
+------------
+
+I suspect that operator can't start up due to memory shortage. Could you try this command to increase memory of discovery operator? Please replace <operator_namespace> with your namespace where discovery operator is.
+NAMESPACE=<operator_namespace>; oc patch csv -n ${NAMESPACE} $(oc get csv -n ${NAMESPACE} -l operators.coreos.com/ibm-watson-discovery-operator.${NAMESPACE} -o jsonpath='{.items[0].metadata.name}') --type=json --patch='[{"op": "replace", "path": "/spec/install/spec/deployments/0/spec/template/spec/containers/0/resources/limits/memory", "value":"6Gi"}]'
+And, I guess the first issue, which postgres license job fails to get secret, is the same issue as https://ibm-analytics.slack.com/archives/CJQ323MMM/p1657256125975509?thread_ts=1656758829.980189&cid=CJQ323MMM. It should be fixed on 4.5.1, but please refer the workaround in the link just in case.
