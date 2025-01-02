@@ -9,3 +9,7 @@ do
         echo "copied $f"
 done
 EOF
+
+
+
+oc patch imagecontentsourcepolicies.operator.openshift.io ibm-apiconnect --type=json --patch '[{"op": "add", "path": "/spec/repositoryDigestMirrors/-", "value": {"mirrors": ["${REGI_PATH}:${REGI_PORT}/openshift4"], "source": "registry.redhat.io/openshift4"}}]'
